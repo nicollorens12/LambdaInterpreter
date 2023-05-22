@@ -1,11 +1,11 @@
 from antlr4 import *
-from lcLexer import exprsLexer
-from lcParser import exprsParser
+from lcLexer import lcLexer
+from lcParser import lcParser
 
-input_stream = FileStream(sys.argv[1], encoding='utf-8')
-lexer = exprsLexer(input_stream)
+input_stream = FileStream("input.txt", encoding='utf-8')
+lexer = lcLexer(input_stream)
 token_stream = CommonTokenStream(lexer)
-parser = exprsParser(token_stream)
+parser = lcParser(token_stream)
 tree = parser.root()
 
 print(parser.getNumberOfSyntaxErrors(), 'errors de sintaxi.')
