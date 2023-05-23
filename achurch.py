@@ -18,5 +18,5 @@ visitor = lcVisitor()
 visitor.visit(tree)
 
 arbol = lcArbre()
-a = arbol.create(tree)
-a.toString()
+arbol.create(tree)
+#a.toString()
