@@ -20,6 +20,7 @@ arbol.visit(tree)
 
 arbs = arbol.arboles
 
+print("Arbre:")
 for arbol in arbs:
     resultado = arbre2String(arbol)
     print(resultado)
