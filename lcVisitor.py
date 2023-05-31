@@ -14,8 +14,8 @@ class lcVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by lcParser#arbre.
-    def visitArbre(self, ctx:lcParser.ArbreContext):
+    # Visit a parse tree produced by lcParser#tree.
+    def visitTree(self, ctx:lcParser.TreeContext):
         return self.visitChildren(ctx)
 
 

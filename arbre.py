@@ -22,4 +22,12 @@ def mida(a: Arbre) -> int:
 
 t = Node(1,Node(2,Buit(),Buit()),Node(3,Buit(),Buit()))
 
-print('mida:', mida(t))
+
+def arbre2String(a: Arbre) -> string:
+    match a:
+        case Buit():
+            return ""
+        case Node(val,e,d):
+            return "" + val + arbre2String(e) + arbre2String(d)
+        case _:
+            return "hola"

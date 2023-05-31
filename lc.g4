@@ -1,8 +1,9 @@
 grammar lc;
 
-root: arbre | expresion EOF;
+root: (arbre | expresion)* EOF;
 
-arbre: INTERROGANTE expresion;
+arbre: INTERROGANTE expresion           # tree
+    ;
 
 expresion: VARIABLE                     # var
     | OPAREN expresion TPAREN           # parentesis

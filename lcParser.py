@@ -10,16 +10,17 @@ else:
 
 def serializedATN():
     return [
-        4,1,7,32,2,0,7,0,2,1,7,1,2,2,7,2,1,0,1,0,1,0,1,0,3,0,11,8,0,1,1,
-        1,1,1,1,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,
-        3,2,30,8,2,1,2,0,0,3,0,2,4,0,0,32,0,10,1,0,0,0,2,12,1,0,0,0,4,29,
-        1,0,0,0,6,11,3,2,1,0,7,8,3,4,2,0,8,9,5,0,0,1,9,11,1,0,0,0,10,6,1,
-        0,0,0,10,7,1,0,0,0,11,1,1,0,0,0,12,13,5,5,0,0,13,14,3,4,2,0,14,3,
-        1,0,0,0,15,30,5,6,0,0,16,17,5,2,0,0,17,18,3,4,2,0,18,19,5,3,0,0,
-        19,30,1,0,0,0,20,21,5,4,0,0,21,22,5,6,0,0,22,23,5,1,0,0,23,30,3,
-        4,2,0,24,25,5,2,0,0,25,26,3,4,2,0,26,27,3,4,2,0,27,28,5,3,0,0,28,
-        30,1,0,0,0,29,15,1,0,0,0,29,16,1,0,0,0,29,20,1,0,0,0,29,24,1,0,0,
-        0,30,5,1,0,0,0,2,10,29
+        4,1,7,35,2,0,7,0,2,1,7,1,2,2,7,2,1,0,1,0,5,0,9,8,0,10,0,12,0,12,
+        9,0,1,0,1,0,1,1,1,1,1,1,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,
+        1,2,1,2,1,2,1,2,3,2,33,8,2,1,2,0,0,3,0,2,4,0,0,36,0,10,1,0,0,0,2,
+        15,1,0,0,0,4,32,1,0,0,0,6,9,3,2,1,0,7,9,3,4,2,0,8,6,1,0,0,0,8,7,
+        1,0,0,0,9,12,1,0,0,0,10,8,1,0,0,0,10,11,1,0,0,0,11,13,1,0,0,0,12,
+        10,1,0,0,0,13,14,5,0,0,1,14,1,1,0,0,0,15,16,5,5,0,0,16,17,3,4,2,
+        0,17,3,1,0,0,0,18,33,5,6,0,0,19,20,5,2,0,0,20,21,3,4,2,0,21,22,5,
+        3,0,0,22,33,1,0,0,0,23,24,5,4,0,0,24,25,5,6,0,0,25,26,5,1,0,0,26,
+        33,3,4,2,0,27,28,5,2,0,0,28,29,3,4,2,0,29,30,3,4,2,0,30,31,5,3,0,
+        0,31,33,1,0,0,0,32,18,1,0,0,0,32,19,1,0,0,0,32,23,1,0,0,0,32,27,
+        1,0,0,0,33,5,1,0,0,0,3,8,10,32
     ]
 
 class lcParser ( Parser ):
@@ -68,16 +69,22 @@ class lcParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def arbre(self):
-            return self.getTypedRuleContext(lcParser.ArbreContext,0)
-
-
-        def expresion(self):
-            return self.getTypedRuleContext(lcParser.ExpresionContext,0)
-
-
         def EOF(self):
             return self.getToken(lcParser.EOF, 0)
+
+        def arbre(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(lcParser.ArbreContext)
+            else:
+                return self.getTypedRuleContext(lcParser.ArbreContext,i)
+
+
+        def expresion(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(lcParser.ExpresionContext)
+            else:
+                return self.getTypedRuleContext(lcParser.ExpresionContext,i)
+
 
         def getRuleIndex(self):
             return lcParser.RULE_root
@@ -95,25 +102,33 @@ class lcParser ( Parser ):
 
         localctx = lcParser.RootContext(self, self._ctx, self.state)
         self.enterRule(localctx, 0, self.RULE_root)
+        self._la = 0 # Token type
         try:
+            self.enterOuterAlt(localctx, 1)
             self.state = 10
             self._errHandler.sync(self)
-            token = self._input.LA(1)
-            if token in [5]:
-                self.enterOuterAlt(localctx, 1)
-                self.state = 6
-                self.arbre()
-                pass
-            elif token in [2, 4, 6]:
-                self.enterOuterAlt(localctx, 2)
-                self.state = 7
-                self.expresion()
+            _la = self._input.LA(1)
+            while (((_la) & ~0x3f) == 0 and ((1 << _la) & 116) != 0):
                 self.state = 8
-                self.match(lcParser.EOF)
-                pass
-            else:
-                raise NoViableAltException(self)
+                self._errHandler.sync(self)
+                token = self._input.LA(1)
+                if token in [5]:
+                    self.state = 6
+                    self.arbre()
+                    pass
+                elif token in [2, 4, 6]:
+                    self.state = 7
+                    self.expresion()
+                    pass
+                else:
+                    raise NoViableAltException(self)
 
+                self.state = 12
+                self._errHandler.sync(self)
+                _la = self._input.LA(1)
+
+            self.state = 13
+            self.match(lcParser.EOF)
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -130,22 +145,33 @@ class lcParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def INTERROGANTE(self):
-            return self.getToken(lcParser.INTERROGANTE, 0)
-
-        def expresion(self):
-            return self.getTypedRuleContext(lcParser.ExpresionContext,0)
-
 
         def getRuleIndex(self):
             return lcParser.RULE_arbre
 
+     
+        def copyFrom(self, ctx:ParserRuleContext):
+            super().copyFrom(ctx)
+
+
+
+    class TreeContext(ArbreContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a lcParser.ArbreContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def INTERROGANTE(self):
+            return self.getToken(lcParser.INTERROGANTE, 0)
+        def expresion(self):
+            return self.getTypedRuleContext(lcParser.ExpresionContext,0)
+
+
         def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitArbre" ):
-                return visitor.visitArbre(self)
+            if hasattr( visitor, "visitTree" ):
+                return visitor.visitTree(self)
             else:
                 return visitor.visitChildren(self)
-
 
 
 
@@ -154,10 +180,11 @@ class lcParser ( Parser ):
         localctx = lcParser.ArbreContext(self, self._ctx, self.state)
         self.enterRule(localctx, 2, self.RULE_arbre)
         try:
+            localctx = lcParser.TreeContext(self, localctx)
             self.enterOuterAlt(localctx, 1)
-            self.state = 12
+            self.state = 15
             self.match(lcParser.INTERROGANTE)
-            self.state = 13
+            self.state = 16
             self.expresion()
         except RecognitionException as re:
             localctx.exception = re
@@ -275,50 +302,50 @@ class lcParser ( Parser ):
         localctx = lcParser.ExpresionContext(self, self._ctx, self.state)
         self.enterRule(localctx, 4, self.RULE_expresion)
         try:
-            self.state = 29
+            self.state = 32
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,1,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input,2,self._ctx)
             if la_ == 1:
                 localctx = lcParser.VarContext(self, localctx)
                 self.enterOuterAlt(localctx, 1)
-                self.state = 15
+                self.state = 18
                 self.match(lcParser.VARIABLE)
                 pass
 
             elif la_ == 2:
                 localctx = lcParser.ParentesisContext(self, localctx)
                 self.enterOuterAlt(localctx, 2)
-                self.state = 16
+                self.state = 19
                 self.match(lcParser.OPAREN)
-                self.state = 17
+                self.state = 20
                 self.expresion()
-                self.state = 18
+                self.state = 21
                 self.match(lcParser.TPAREN)
                 pass
 
             elif la_ == 3:
                 localctx = lcParser.AbstraccionContext(self, localctx)
                 self.enterOuterAlt(localctx, 3)
-                self.state = 20
-                self.match(lcParser.LAMBDA)
-                self.state = 21
-                self.match(lcParser.VARIABLE)
-                self.state = 22
-                self.match(lcParser.PUNT)
                 self.state = 23
+                self.match(lcParser.LAMBDA)
+                self.state = 24
+                self.match(lcParser.VARIABLE)
+                self.state = 25
+                self.match(lcParser.PUNT)
+                self.state = 26
                 self.expresion()
                 pass
 
             elif la_ == 4:
                 localctx = lcParser.AplicacionContext(self, localctx)
                 self.enterOuterAlt(localctx, 4)
-                self.state = 24
-                self.match(lcParser.OPAREN)
-                self.state = 25
-                self.expresion()
-                self.state = 26
-                self.expresion()
                 self.state = 27
+                self.match(lcParser.OPAREN)
+                self.state = 28
+                self.expresion()
+                self.state = 29
+                self.expresion()
+                self.state = 30
                 self.match(lcParser.TPAREN)
                 pass
 

@@ -13,43 +13,39 @@ from arbre import Arbre
 class lcArbre(ParseTreeVisitor):
 
     def __init__(self):
-        self.arbol = Arbre
+        self.arboles = []
 
-    # Visit a parse tree produced by lcParser#arbre.
-    def visitArbre(self, ctx:lcParser.ArbreContext):
-        
-        self.arbol = Node("@",)
-        return self
-
-
+    # Visit a parse tree produced by lcParser#root.
+    def visitRoot(self, ctx:lcParser.RootContext):
+        return self.visitChildren(ctx)
+    
+    # Visit a parse tree produced by lcParser#tree.
+    def visitTree(self, ctx:lcParser.TreeContext):
+        #lista((terme,arbol))
+        [interrogante, expresion] = list(ctx.getChildren())
+        self.arboles.append(self.visit(expresion)) 
+    
     # Visit a parse tree produced by lcParser#parentesis.
     def visitParentesis(self, ctx:lcParser.ParentesisContext):
-        [opar,expresion,tpar] = list(ctx.getChildren)
+        [opar,expresion,tpar] = list(ctx.getChildren())
         return Node("exp",Buit,Buit)
 
 
     # Visit a parse tree produced by lcParser#var.
     def visitVar(self, ctx:lcParser.VarContext):
-        [var] = list(ctx.getChildren)
+        [var] = list(ctx.getChildren())
         return Node(var,Buit,Buit)
-
-
+    
     # Visit a parse tree produced by lcParser#aplicacion.
     def visitAplicacion(self, ctx:lcParser.AplicacionContext):
-        [opar,expresion,expresion,tpar] = list(ctx.getChildren)
-        return Node("@",expresion,expresion)
+        [opar,expresion,expresion,tpar] = list(ctx.getChildren())
+        return Node("@",self.visit(expresion),self.visit(expresion))
 
 
     # Visit a parse tree produced by lcParser#abstraccion.
     def visitAbstraccion(self, ctx:lcParser.AbstraccionContext):
-        [lam,var,punt,expresion] = list(ctx.getChildren)
-        return Node("\\",var, self.visitChildren(ctx) )
+        [lam,var,punt,expresion] = list(ctx.getChildren())
+        return Node(lam.getText(),var, self.visit(expresion) )
     
-    def create(self, ctx):
-        self.visitArbre(self, ctx)
-        return self
-    
-
-
 
 del lcParser
