@@ -19,23 +19,23 @@ class lcVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by lcParser#var.
-    def visitVar(self, ctx:lcParser.VarContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by lcParser#parentesis.
     def visitParentesis(self, ctx:lcParser.ParentesisContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by lcParser#abstraccion.
-    def visitAbstraccion(self, ctx:lcParser.AbstraccionContext):
+    # Visit a parse tree produced by lcParser#var.
+    def visitVar(self, ctx:lcParser.VarContext):
         return self.visitChildren(ctx)
 
 
     # Visit a parse tree produced by lcParser#aplicacion.
     def visitAplicacion(self, ctx:lcParser.AplicacionContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by lcParser#abstraccion.
+    def visitAbstraccion(self, ctx:lcParser.AbstraccionContext):
         return self.visitChildren(ctx)
 
 

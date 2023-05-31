@@ -28,24 +28,24 @@ class lcArbre(ParseTreeVisitor):
     # Visit a parse tree produced by lcParser#parentesis.
     def visitParentesis(self, ctx:lcParser.ParentesisContext):
         [opar,expresion,tpar] = list(ctx.getChildren())
-        return Node("exp",Buit,Buit)
+        return self.visit(expresion)
 
 
     # Visit a parse tree produced by lcParser#var.
     def visitVar(self, ctx:lcParser.VarContext):
         [var] = list(ctx.getChildren())
-        return Node(var,Buit,Buit)
+        return Node(var.getText(),Buit(),Buit())
     
     # Visit a parse tree produced by lcParser#aplicacion.
     def visitAplicacion(self, ctx:lcParser.AplicacionContext):
-        [opar,expresion,expresion,tpar] = list(ctx.getChildren())
-        return Node("@",self.visit(expresion),self.visit(expresion))
+        [expresion1,expresion2] = list(ctx.getChildren())
+        return Node("",self.visit(expresion1),self.visit(expresion2))
 
 
     # Visit a parse tree produced by lcParser#abstraccion.
     def visitAbstraccion(self, ctx:lcParser.AbstraccionContext):
         [lam,var,punt,expresion] = list(ctx.getChildren())
-        return Node(lam.getText(),var, self.visit(expresion) )
+        return Node(lam.getText(),Node(var.getText(),Buit(),Buit()), self.visit(expresion) )
     
 
 del lcParser

@@ -7,8 +7,8 @@ arbre: INTERROGANTE expresion           # tree
 
 expresion: VARIABLE                     # var
     | OPAREN expresion TPAREN           # parentesis
-    | LAMBDA VARIABLE PUNT expresion    # abstraccion
-    | OPAREN expresion expresion TPAREN # aplicacion
+    | expresion expresion               # aplicacion
+    | LAMBDA (VARIABLE)+ PUNT expresion # abstraccion
     ;
 
 PUNT : '.' ;
