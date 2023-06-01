@@ -44,8 +44,16 @@ class lcArbre(ParseTreeVisitor):
 
     # Visit a parse tree produced by lcParser#abstraccion.
     def visitAbstraccion(self, ctx:lcParser.AbstraccionContext):
-        [lam,var,punt,expresion] = list(ctx.getChildren())
-        return Node(lam.getText(),Node(var.getText(),Buit(),Buit()), self.visit(expresion) )
+        abstr = list(ctx.getChildren())
+        lam = abstr[0].getText()
+        arbre = None
+        size = len(abstr)
+        for i in range(size -1,0,-1):
+            if(i == size -1):
+                arbre = self.visit(abstr[i])
+            elif(i < size - 2):
+                arbre = Node(lam,Node(abstr[i].getText(),Buit(),Buit()),arbre)
+        return arbre
     
 
 del lcParser
