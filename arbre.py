@@ -22,6 +22,18 @@ def mida(a: Arbre) -> int:
 
 t = Node(1,Node(2,Buit(),Buit()),Node(3,Buit(),Buit()))
 
+def equal(arbol1: Arbre, arbol2: Arbre) -> bool:
+    if isinstance(arbol1, Buit) and isinstance(arbol2, Buit):
+        return True
+    elif isinstance(arbol1, Node) and isinstance(arbol2, Node):
+        return (
+            arbol1.val == arbol2.val and
+            equal(arbol1.esq, arbol2.esq) and
+            equal(arbol1.dre, arbol2.dre)
+        )
+    else:
+        return False
+
 
 def arbre2String(a: Arbre) -> string:
    match a:
@@ -35,5 +47,3 @@ def arbre2String(a: Arbre) -> string:
             return "(λ" + arbre2String(e) + "." + arbre2String(d) +")"
         case Node(x,e,d):
             return "(" + x + arbre2String(e) + arbre2String(d) +")"
-        case _:
-            print("estamos aqui")

@@ -4,11 +4,7 @@ if "." in __name__:
     from .lcParser import lcParser
 else:
     from lcParser import lcParser
-from arbre import Buit
-from arbre import Node
-from arbre import Arbre
-
-
+from arbre import *
 
 class lcArbre(ParseTreeVisitor):
 
