@@ -1,20 +1,29 @@
 grammar lc;
 
-root: (arbre | expresion)* EOF;
+root:  (macro |arbol | terme)* EOF ;
 
-arbre: INTERROGANTE expresion           # tree
+macro: INTERROGANTE (IDENTIFIER|OPERACION) ASSIG terme                           #macroAssig
+    | INTERROGANTE IDENTIFIER  (OPERACION IDENTIFIER)*                #macroOp
+    | INTERROGANTE (IDENTIFIER)+                                     #macroApli
     ;
 
-expresion: VARIABLE                     # var
-    | OPAREN expresion TPAREN           # parentesis
-    | expresion expresion               # aplicacion
-    | LAMBDA (VARIABLE)+ PUNT expresion # abstraccion
+arbol: INTERROGANTE terme                               #arbolF   
+    ;
+
+terme: VARIABLE                                         #var
+    | OPAREN terme CPAREN                               #paren
+    | terme terme                                       #apl
+    | LAMBDA (VARIABLE)+ PUNT terme                     #abs
     ;
 
 PUNT : '.' ;
 OPAREN : '(' ;
-TPAREN : ')' ;
+CPAREN : ')' ;
 LAMBDA : '\\' | 'λ' ;
-INTERROGANTE: '?';
 VARIABLE : [a-z] ;
-WS : [ \t\n\r]+ -> skip;
+IDENTIFIER: [A-Z][a-zA-Z0-9]*;
+NUMEROS : [0-9]+ ;
+INTERROGANTE : '?' ;
+ASSIG : '≡' | '=';
+OPERACION : '+' | '-' | '*' | '/' | '%' | '$' | '&' | '#' ;
+WS: [ \t\n\r]+ -> skip;

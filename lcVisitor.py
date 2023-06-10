@@ -14,13 +14,33 @@ class lcVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by lcParser#tree.
-    def visitTree(self, ctx:lcParser.TreeContext):
+    # Visit a parse tree produced by lcParser#macroAssig.
+    def visitMacroAssig(self, ctx:lcParser.MacroAssigContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by lcParser#parentesis.
-    def visitParentesis(self, ctx:lcParser.ParentesisContext):
+    # Visit a parse tree produced by lcParser#macroOp.
+    def visitMacroOp(self, ctx:lcParser.MacroOpContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by lcParser#macroApli.
+    def visitMacroApli(self, ctx:lcParser.MacroApliContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by lcParser#arbolF.
+    def visitArbolF(self, ctx:lcParser.ArbolFContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by lcParser#paren.
+    def visitParen(self, ctx:lcParser.ParenContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by lcParser#abs.
+    def visitAbs(self, ctx:lcParser.AbsContext):
         return self.visitChildren(ctx)
 
 
@@ -29,13 +49,8 @@ class lcVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by lcParser#aplicacion.
-    def visitAplicacion(self, ctx:lcParser.AplicacionContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by lcParser#abstraccion.
-    def visitAbstraccion(self, ctx:lcParser.AbstraccionContext):
+    # Visit a parse tree produced by lcParser#apl.
+    def visitApl(self, ctx:lcParser.AplContext):
         return self.visitChildren(ctx)
 
 
