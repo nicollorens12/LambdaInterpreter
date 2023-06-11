@@ -40,8 +40,8 @@ class functionsArbre:
             reduced = self.reduceBeta(arbol)
             if not equal(reduced,arbol):
                 #print("β-reducción:")
-                self.respuesta_evaluada.append(toStringArbre(arbol) + " -> β-> " + toStringArbre(reduced))
-                #print(f"{toStringArbre(arbol)} -> {toStringArbre(reduced)}")
+                self.respuesta_evaluada.append((abre2String(arbol) + " -> β-> " + abre2String(reduced),reduced))
+                #print(f"{abre2String(arbol)} -> {abre2String(reduced)}")
             else:
                 match reduced:
                     case Buit():
@@ -87,7 +87,7 @@ class functionsArbre:
                 self.getVarsLibres(y,contexto,lligada)
                 
     def getVars(self,arbol: Arbre, contexto:set):
-        #print("getVars: " + toStringArbre(arbol))
+        #print("getVars: " + abre2String(arbol))
         match arbol:
             case Buit():
                 return contexto
@@ -140,7 +140,7 @@ class functionsArbre:
                     expres.add(nuevo)
                     expres.remove(inter)
                     exp_nueva = self.cambiarExp(nuevo,inter,exp_antigua)
-                    self.respuesta_evaluada.append(toStringArbre(exp_antigua) + " → α → " + toStringArbre(exp_nueva))
+                    self.respuesta_evaluada.append((abre2String(exp_antigua) + " → α → " + abre2String(exp_nueva),exp_nueva))
                     arbol = Node("",exp_nueva,d)
         return arbol
     
@@ -152,8 +152,6 @@ class functionsArbre:
         while(i <= maxReductions):
             arbolConver = self.alphaConvertir(arbol)
             reduced = self.reduce(arbolConver)
-            #print("FLAG")
-            #print(toStringArbre(reduced))
             if not equal(arbolConver,reduced):
                 repe = 0
                 arbol = reduced
@@ -162,22 +160,22 @@ class functionsArbre:
                 break
             elif equal(arbolConver,reduced) and repe < 3:
                 repe += 1
-                self.respuesta_evaluada.append(toStringArbre(arbol) + " -> β-> " + toStringArbre(reduced))
+                self.respuesta_evaluada.append((abre2String(arbol) + " -> β-> " + abre2String(reduced),reduced))
                 arbol = reduced
             elif equal(arbolConver,reduced) and repe == 3:
                 repe += 1
-                self.respuesta_evaluada.append("...")
+                self.respuesta_evaluada.append(("...",Buit()))
             elif equal(arbolConver,reduced) and repe >= 4:
                 repe += 1
                 arbol = reduced
             else :
                 break
             i += 1
-        self.respuesta_evaluada.append("Resultat: ")
+        self.respuesta_evaluada.append(("Resultat: ",Buit()))
         if repe < 2:
-            self.respuesta_evaluada.append(toStringArbre(arbol))
+            self.respuesta_evaluada.append((abre2String(arbol),Buit()))
         elif i > maxReductions:
-            self.respuesta_evaluada.append("Nothing")
+            self.respuesta_evaluada.append(("Nothing",Buit()))
         return self.respuesta_evaluada
 
 

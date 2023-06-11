@@ -7,13 +7,77 @@ from arbre import *
 from typing import Final
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
+import pydot
 
 TOKEN: Final = '5804637848:AAEo6uDhUFyrCLDCV4TD3C8991EeRVquhsc'
 BOT_USERNAME: Final = "@NicoLambda_bot"
 
 eArbol = lcVisitorArbol()
 
-# COMANDAMENTS
+
+def idInUse(id:int,ids:list)-> bool:
+    for ida in ids:
+        if ida == id:
+            return True
+    return False
+
+
+def recorrer_arbol(arbol: Arbre, parent_node: pydot.Node, id: int, ids: list, graf:pydot.Dot):
+    match arbol:
+        case Buit():
+            return
+        case Node(x,Buit(),Buit()):
+            while idInUse(id,ids):
+                id = id + 1
+            node = pydot.Node(id,label = x)
+            graf.add_node(node)
+            ids.append(id)
+            
+            if parent_node.get_name() != "Root":
+                graf.add_edge(pydot.Edge(parent_node.get_name(),node.get_name(), color ="black"))
+            
+            return
+        
+        case Node("\\",e,d):
+            while idInUse(id,ids):
+                id = id + 1
+            node = pydot.Node(id, label = "λ" + e.val)
+            graf.add_node(node)
+            ids.append(id)
+            
+            if parent_node.get_name() != "Root":
+                graf.add_edge(pydot.Edge(parent_node.get_name(),node.get_name(), color ="black"))
+
+            recorrer_arbol(d,node,id,ids,graf)
+            return
+        
+        case Node("λ",e,d):
+            while idInUse(id,ids):
+                id = id + 1
+            node = pydot.Node(id,label = "λ" + e.val)
+            graf.add_node(node)
+            ids.append(id)
+            
+            if parent_node.get_name() != "Root":
+                graf.add_edge(pydot.Edge(parent_node.get_name(),node.get_name(), color ="black"))
+
+            recorrer_arbol(d,node,id,ids,graf)
+            return
+        
+        case Node(x,e,d):
+            while idInUse(id,ids):
+                id = id + 1    
+            node = pydot.Node(id, label = "@")
+            graf.add_node(node)
+            ids.append(id)
+            
+            if parent_node.get_name() != "Root":
+                graf.add_edge(pydot.Edge(parent_node.get_name(),node.get_name(), color ="black"))
+ 
+            recorrer_arbol(e,node,id,ids,graf)
+            recorrer_arbol(d,node,id,ids,graf)
+            return
+
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     eArbol.mapMacros = {}
@@ -32,14 +96,15 @@ async def macros_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("Encara no hi ha cap macro definida en el sistema")
     else:
         for macro in eArbol.mapMacros:
-            respostes.append(macro + "≡" +toStringArbre(eArbol.mapMacros[macro]))
+            respostes.append(macro + "≡" +abre2String(eArbol.mapMacros[macro]))
         for resposta in respostes:
             await update.message.reply_text(resposta)
 
 
 # FUNCIO PER NO PERMETRE OPERAR AMB MACROS NO EXISTENTS 
+
     
-# RESPOSTES
+# RESPOSTES BOT
 
 async def enviar_resposta(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
@@ -53,35 +118,41 @@ async def enviar_resposta(update: Update, context: ContextTypes.DEFAULT_TYPE):
     eArbol.visit(tree)
     
     arboles = eArbol.arboles
-    resposta = []
+    respostes = []
     farbre.respuesta_evaluada = []
     for arbol in arboles:
+ 
         terme, arb = arbol
-        astring = toStringArbre(arb)
-        resposta.append(astring)
-        resposta = resposta + farbre.evaluar(arb)
-        print(len(resposta))
-    for mensaje in resposta:
-        await update.message.reply_text(mensaje)
-    print("Afegir macro size: " + str(len(eArbol.mapMacros)))
-    eArbol.arboles = []
+        respostes = []
+        respostes.append((abre2String(arb),arb))
+        respostes = respostes + farbre.evaluar(arb)
+        
+    for resposta in respostes:
+        ans,arbol_graf = resposta
+        print()
+        await update.message.reply_text(ans)
+        if not equal(arbol_graf,Buit()):
+            ids = []
+            graf = pydot.Dot(graph_type='digraph')
+            ids.append(0)
+            recorrer_arbol(arbol_graf,pydot.Node("Root"),0,ids,graf)
+            graf.write_png("output.png")
+            
+            await context.bot.send_document(chat_id=update.effective_chat.id, document=open('output.png', 'rb'))
+            
+   
+    eArbol.arboles = []  
     
-    
-# GESTIONAMENT ERRORS
+# GESTIONAMENT ERRORS BOT
 
 async def error(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print(f"Update {update} caused error {context.error}")
     
-    
-    
 
 if __name__ == '__main__':  
-    print("Starting bot...")
+    print("Bot Arrancant...")
     app = Application.builder().token(TOKEN).build()
-    
-    #if(eArbol is None):
-    #    eArbol = lcVisitorArbol()
-        
+     
     # Comandes
     app.add_handler(CommandHandler('start',start_command))
     app.add_handler(CommandHandler('author',author_command))

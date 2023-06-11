@@ -28,15 +28,19 @@ def equal(tree1: Arbre, tree2: Arbre) -> bool:
         return False
 
 
-def toStringArbre(a: Arbre) -> string:
+def abre2String(a: Arbre) -> string:
+    #print("IMPRIMO")
     match a:
         case Buit():
             return ""
         case Node(x,Buit(),Buit()):
             return x 
+        
         case Node("\\",e,d):
-            return "(\\" + toStringArbre(e) + "." + toStringArbre(d) +")"
+            return "(\\" + abre2String(e) + "." + abre2String(d) +")"
+        
         case Node("λ",e,d):
-            return "(λ" + toStringArbre(e) + "." + toStringArbre(d) +")"
+            return "(λ" + abre2String(e) + "." + abre2String(d) +")"
+        
         case Node(x,e,d):
-            return "(" + x + toStringArbre(e) + toStringArbre(d) +")"
+            return "(" + x + abre2String(e) + abre2String(d) +")"
