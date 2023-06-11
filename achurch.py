@@ -114,9 +114,6 @@ async def macros_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text(resposta)
 
 
-# FUNCIO PER NO PERMETRE OPERAR AMB MACROS NO EXISTENTS 
-
-    
 # RESPOSTES BOT
 
 async def enviar_resposta(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -134,8 +131,7 @@ async def enviar_resposta(update: Update, context: ContextTypes.DEFAULT_TYPE):
     respostes = []
     farbre.respuesta_evaluada = []
     for arbol in arboles:
- 
-        terme, arb = arbol
+        _, arb = arbol
         respostes = []
         respostes.append((abre2String(arb),arb))
         respostes = respostes + farbre.evaluar(arb)
@@ -144,9 +140,7 @@ async def enviar_resposta(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ans,arbol_graf = resposta
         await update.message.reply_text(ans)
         
-        #print(ans + " " + abre2String(arbol_graf))
         if not equal(arbol_graf,Buit()):
-            print(ans)
             ids = []
             graf = pydot.Dot(graph_type='digraph')
             ids.append(0)

@@ -2,8 +2,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 import string
 
-# This class defines a complete generic visitor for a parse tree produced by lcParser.
-
 class Buit:
     pass
 
@@ -19,17 +17,13 @@ def equal(tree1: Arbre, tree2: Arbre) -> bool:
     if isinstance(tree1, Buit) and isinstance(tree2, Buit):
         return True
     elif isinstance(tree1, Node) and isinstance(tree2, Node):
-        return (
-            tree1.val == tree2.val and
-            equal(tree1.esq, tree2.esq) and
-            equal(tree1.dre, tree2.dre)
-        )
+        return ( tree1.val == tree2.val and equal(tree1.esq, tree2.esq) and equal(tree1.dre, tree2.dre))
     else:
         return False
 
 
 def abre2String(a: Arbre) -> string:
-    #print("IMPRIMO")
+
     match a:
         case Buit():
             return ""

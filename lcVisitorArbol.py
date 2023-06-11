@@ -67,11 +67,11 @@ class lcVisitorArbol(ParseTreeVisitor):
         for i in range(len(macros)- 1, 0,-1):
             strMacro += macros[i].getText() + " "
             if equal(arbol_out.dre,Buit()):
-                #print("1: " + macros[i].getText())
                 arbol_out.dre = self.mapMacros[macros[i].getText()]
+                
             elif equal(arbol_out.esq,Buit()):
-                #print("2: " + macros[i].getText())
                 arbol_out.esq = self.mapMacros[macros[i].getText()]
+                
             else:
                 arbol_out = Node("",self.mapMacros[macros[i].getText()],arbol_out)
         self.arboles.append((strMacro,arbol_out))
@@ -84,11 +84,11 @@ class lcVisitorArbol(ParseTreeVisitor):
         for macro in macros[1:]:
             strMacro += macro.getText() + " "
             if equal(arbol_out.dre,Buit()):
-                #print("1: " + macro.getText())
                 arbol_out.dre = self.mapMacros[macro.getText()]
+                
             elif equal(arbol_out.esq,Buit()):
-                #print("2: " + macro.getText())
                 arbol_out.esq = self.mapMacros[macro.getText()]
+                
             else:
                 arbol_out = Node("",arbol_out,self.mapMacros[macro.getText()])
         self.arboles.append((strMacro,arbol_out))
