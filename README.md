@@ -4,7 +4,11 @@ Practica LP Q2 2022-2023
 Nicolas Llorens Somalo 
 
 ## Com executar l'interpretador?
-Per executar la pràctica només cal executar aquesta comanda:
+Per executar la pràctica caldrà aquesta comanda per compilar la gramàtica:
+```
+antlr4 -Dlanguage=Python3 -no-listener -visitor lc.g4
+```
+I amb la gramàtica compilada només cal executar aquesta comanda:
 ```
 python3 achurch.py
 ```
