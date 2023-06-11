@@ -2,7 +2,7 @@ from antlr4 import *
 from lcLexer import lcLexer
 from lcParser import lcParser
 from lcVisitorArbol import lcVisitorArbol
-from lcEval import functionsArbre
+from treeEval import functionsArbre
 from arbre import *
 from typing import Final
 from telegram import Update
@@ -21,8 +21,14 @@ def idInUse(id:int,ids:list)-> bool:
             return True
     return False
 
+def varInDependency(dependencias,x) -> pydot.Node:
+    for depe in dependencias:
+        value,nodo = depe
+        if value == x:
+            return nodo
+    return None
 
-def recorrer_arbol(arbol: Arbre, parent_node: pydot.Node, id: int, ids: list, graf:pydot.Dot):
+def recorrer_arbol(arbol: Arbre, parent_node: pydot.Node, id: int, ids: list, graf:pydot.Dot, dependencias):
     match arbol:
         case Buit():
             return
@@ -32,6 +38,11 @@ def recorrer_arbol(arbol: Arbre, parent_node: pydot.Node, id: int, ids: list, gr
             node = pydot.Node(id,label = x)
             graf.add_node(node)
             ids.append(id)
+            
+            nodo_aux = varInDependency(dependencias,x)
+            
+            if nodo_aux != None:
+                graf.add_edge(pydot.Edge(node.get_name(),nodo_aux.get_name(), color ="black",style = "dashed"))
             
             if parent_node.get_name() != "Root":
                 graf.add_edge(pydot.Edge(parent_node.get_name(),node.get_name(), color ="black"))
@@ -44,11 +55,12 @@ def recorrer_arbol(arbol: Arbre, parent_node: pydot.Node, id: int, ids: list, gr
             node = pydot.Node(id, label = "λ" + e.val)
             graf.add_node(node)
             ids.append(id)
+            dependencias.append((e.val,node))
             
             if parent_node.get_name() != "Root":
                 graf.add_edge(pydot.Edge(parent_node.get_name(),node.get_name(), color ="black"))
 
-            recorrer_arbol(d,node,id,ids,graf)
+            recorrer_arbol(d,node,id,ids,graf,dependencias)
             return
         
         case Node("λ",e,d):
@@ -57,11 +69,12 @@ def recorrer_arbol(arbol: Arbre, parent_node: pydot.Node, id: int, ids: list, gr
             node = pydot.Node(id,label = "λ" + e.val)
             graf.add_node(node)
             ids.append(id)
+            dependencias.append((e.val,node))
             
             if parent_node.get_name() != "Root":
                 graf.add_edge(pydot.Edge(parent_node.get_name(),node.get_name(), color ="black"))
 
-            recorrer_arbol(d,node,id,ids,graf)
+            recorrer_arbol(d,node,id,ids,graf,dependencias)
             return
         
         case Node(x,e,d):
@@ -74,8 +87,8 @@ def recorrer_arbol(arbol: Arbre, parent_node: pydot.Node, id: int, ids: list, gr
             if parent_node.get_name() != "Root":
                 graf.add_edge(pydot.Edge(parent_node.get_name(),node.get_name(), color ="black"))
  
-            recorrer_arbol(e,node,id,ids,graf)
-            recorrer_arbol(d,node,id,ids,graf)
+            recorrer_arbol(e,node,id,ids,graf,dependencias)
+            recorrer_arbol(d,node,id,ids,graf,dependencias)
             return
 
 
@@ -129,13 +142,16 @@ async def enviar_resposta(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
     for resposta in respostes:
         ans,arbol_graf = resposta
-        print()
         await update.message.reply_text(ans)
+        
+        #print(ans + " " + abre2String(arbol_graf))
         if not equal(arbol_graf,Buit()):
+            print(ans)
             ids = []
             graf = pydot.Dot(graph_type='digraph')
             ids.append(0)
-            recorrer_arbol(arbol_graf,pydot.Node("Root"),0,ids,graf)
+            dependencias = []
+            recorrer_arbol(arbol_graf,pydot.Node("Root"),0,ids,graf,dependencias)
             graf.write_png("output.png")
             
             await context.bot.send_document(chat_id=update.effective_chat.id, document=open('output.png', 'rb'))
