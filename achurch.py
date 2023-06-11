@@ -148,8 +148,8 @@ async def enviar_resposta(update: Update, context: ContextTypes.DEFAULT_TYPE):
             recorrer_arbol(arbol_graf,pydot.Node("Root"),0,ids,graf,dependencias)
             graf.write_png("output.png")
             
-            await context.bot.send_document(chat_id=update.effective_chat.id, document=open('output.png', 'rb'))
-            
+            await context.bot.send_photo(chat_id=update.effective_chat.id, photo=open('output.png', 'rb'))
+            #await context.bot.send
    
     eArbol.arboles = []  
     

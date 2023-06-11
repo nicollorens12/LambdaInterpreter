@@ -166,7 +166,7 @@ class functionsArbre:
             else :
                 break
             i += 1
-        self.respuesta_evaluada.append(("Resultat: ",Buit()))
+        #self.respuesta_evaluada.append(("Resultat: ",Buit()))
         if repe < 2:
             self.respuesta_evaluada.append((abre2String(arbol),arbol))
         elif i > maxRed:
