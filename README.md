@@ -1,4 +1,4 @@
-# LambdaInterpreter
+# Lambda Interpreter
 
 Practica LP Q2 2022-2023
 Nicolas Llorens Somalo 
